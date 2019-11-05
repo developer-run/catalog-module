@@ -1,0 +1,319 @@
+<div class="row mb-5">
+	<div class="col-md-9 order-2">
+
+
+		<div class="overlay dark">
+			<i class="fas fa-2x fa-sync-alt"></i>
+		</div>
+
+		<div class="shop_grid_product_area">
+			<div class="row">
+				<div class="col-12">
+					<div class="product-topbar d-flex align-items-center justify-content-between mt-15">
+						<!-- Total Products -->
+						<div n:snippet="itemsCount" class="total-products">
+							<p><span>{$itemsTotal}</span> {_site.cataloguePage.polozek, $itemsTotal}</p>
+						</div>
+
+
+						{*{_"Text, který bude přeložen"}*}
+						{*{_}Text, který bude přeložen{/_}*}
+
+						<!-- Sorting -->
+						<div class="product-sorting d-flex">
+							<p>Zobrazit:</p>
+
+							{form sortingForm}
+								{input sort}
+							{/form}
+							{*{snippet sort}*}
+							{*{/snippet}*}
+
+{*
+
+							<form action="#" method="get">
+								<select name="select" id="sortByselect">
+									<option value="value">Od nejlevnějších</option>
+									<option value="value">Od nejdražších</option>
+								</select>
+								<input type="submit" class="d-none" value="">
+							</form>
+*}
+						</div>
+					</div>
+				</div>
+			</div>
+			<div n:snippet="products" class="row" data-super-effect="true">
+				<div n:foreach="$products as $product" class="col-12 col-sm-6 col-lg-3 mb-15">
+
+					<!-- Single Product -->
+					<div class="single-product-wrapper border p-4">
+						<!-- Product Image -->
+						<div class="product-img">
+							<a href="{plink Product:detail $product->id}" class="ajax">
+								<img n:img="$product->images->first()->identifier, '250x250', fill" alt="{$product->name}" style="max-height: 250px">
+								<!-- Hover Thumb -->
+								<img n:if="$product->images->count() > 1" n:img="$product->images->get(1)->identifier, '250x250', fill" style="max-height: 250px" alt="{$product->name}" class="hover-img">
+							</a>
+
+							<!-- Product Badge -->
+							{*
+							<div class="product-badge offer-badge">
+								<span>-30%</span>
+							</div>
+							*}
+							<!-- Favourite -->
+							{*
+							<div class="product-favourite">
+								<a href="{plink Product:detail $product->id}" class="favme fa fa-heart"></a>
+							</div>
+							*}
+						</div>
+
+						<!-- Product Description -->
+						<div class="product-description">
+							{*<span>topshop</span>*}
+							<a href="{plink Product:detail $product->id}" class="ajax">
+								<h2 class="h6">{$product->name}</h2>
+								<h3 class="h6"><small class="mb-0">{$product->description|striptags|noescape|truncate:160}</small></h3>
+								{*<p class="product-price"><span class="old-price">$75.00</span> $55.00</p>*}
+								<p class="product-price">{$product->price} Kč</p>
+							</a>
+
+							<!-- Hover Content -->
+{*
+							<div class="hover-content">
+								<!-- Add to Cart -->
+								<div class="add-to-cart-btn">
+									<a href="{$product->feedUrl}" class="btn essence-btn">Detail</a>
+								</div>
+							</div>
+*}
+						</div>
+					</div>
+
+
+				</div>
+			</div>
+		</div>
+
+		<div n:snippet="pagination" class="mt-50 mb-70">
+			{control pagination}
+		</div>
+	</div>
+
+	<div n:snippet="filter" class="col-md-3 order-1 mb-5 mb-md-0">
+		{form filterForm}
+		<div class="_border p-4 rounded mb-4">
+			<div n:if="$limitShow" class="mb-4">
+				<h3 class="mb-3 h6 text-uppercase text-black d-block">Cena</h3>
+				<div id="price-range" class="border-primary"></div>
+				{input price}
+			</div>
+
+			{formContainer variants}
+			<div style="position:relative;">
+				<a class="btn-link btn-xs text-muted ajax" style="position:absolute; right: 0;" n:href="resetFilter!">Zrušit vybrané parametry</a>
+			</div>
+			<div n:foreach="$variants as $id => $variant" class="mb-4">
+				<h3 class="mb-3 h6 text-uppercase text-black d-block">{$variant->name}</h3>
+				{foreach $form['variants'][$id]->items as $key => $label}
+					{*{dump $variant}*}
+					<label n:name="$id:$key" class="d-flex">
+						<input n:name="$id:$key" class="mr-2 mt-1"{if $variant->getVariantProducts($key)==0} disabled="disabled"{/if}>
+						<span class="text-black">{$label} ({$variant->getVariantProducts($key)})</span>
+					</label>
+				{/foreach}
+			</div>
+			{/formContainer}
+
+{*
+			<div class="mb-4">
+				{input filter}
+			</div>
+*}
+		</div>
+		{/form}
+
+{*
+
+		<!-- ##### Single Widget ##### -->
+		<div class="widget price mb-50">
+			<!-- Widget Title -->
+			<h6 class="widget-title mb-30">Filter by</h6>
+			<!-- Widget Title 2 -->
+			<p class="widget-title2 mb-30">Price</p>
+
+			<div class="widget-desc">
+				<div class="slider-range">
+					<div data-min="49" data-max="360" data-unit="$" class="slider-range-price ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" data-value-min="49" data-value-max="360" data-label-result="Range:">
+						<div class="ui-slider-range ui-widget-header ui-corner-all"></div>
+						<span class="ui-slider-handle ui-state-default ui-corner-all" tabindex="0"></span>
+						<span class="ui-slider-handle ui-state-default ui-corner-all" tabindex="0"></span>
+					</div>
+					<div class="range-price">Range: $49.00 - $360.00</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- ##### Single Widget ##### -->
+		<div class="widget color mb-50">
+			<!-- Widget Title 2 -->
+			<p class="widget-title2 mb-30">Color</p>
+			<div class="widget-desc">
+				<ul class="d-flex">
+					<li><a href="#" class="color1"></a></li>
+					<li><a href="#" class="color2"></a></li>
+					<li><a href="#" class="color3"></a></li>
+					<li><a href="#" class="color4"></a></li>
+					<li><a href="#" class="color5"></a></li>
+					<li><a href="#" class="color6"></a></li>
+					<li><a href="#" class="color7"></a></li>
+					<li><a href="#" class="color8"></a></li>
+					<li><a href="#" class="color9"></a></li>
+					<li><a href="#" class="color10"></a></li>
+				</ul>
+			</div>
+		</div>
+
+		<!-- ##### Single Widget ##### -->
+		<div class="widget brands mb-50">
+			<!-- Widget Title 2 -->
+			<p class="widget-title2 mb-30">Brands</p>
+			<div class="widget-desc">
+				<ul>
+					<li><a href="#">Asos</a></li>
+					<li><a href="#">Mango</a></li>
+					<li><a href="#">River Island</a></li>
+					<li><a href="#">Topshop</a></li>
+					<li><a href="#">Zara</a></li>
+				</ul>
+			</div>
+		</div>
+
+*}
+
+		{*
+		<div class="border p-4 rounded mb-4">
+			<h3 class="mb-3 h6 text-uppercase text-black d-block">Categories</h3>
+			<ul class="list-unstyled mb-0">
+				<li n:foreach="$categories as $category" class="mb-1"><a href="{plink Catalogue: cid => $category->id}" class="d-flex"><span>{$category->name}</span> <span class="text-black ml-auto">( {$category->products->count()} )</span></a></li>
+			</ul>
+		</div>
+		*}
+
+	</div>
+</div>
+
+{*
+<div class="row">
+	<div class="col-md-12">
+		<div class="site-section site-blocks-2">
+			<div class="row justify-content-center text-center mb-5">
+				<div class="col-md-7 site-section-heading pt-4">
+					<h2>Categories</h2>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0" data-aos="fade" data-aos-delay="">
+					<a class="block-2-item" href="#">
+						<figure class="image">
+							<img src="{$basePath}/images/person.png" alt="" class="img-fluid">
+						</figure>
+						<div class="text">
+							<span class="text-uppercase">Collections</span>
+							<h3>Women</h3>
+						</div>
+					</a>
+				</div>
+				<div class="col-sm-6 col-md-6 col-lg-4 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="100">
+					<a class="block-2-item" href="#">
+						<figure class="image">
+							<img src="{$basePath}/images/admin-man-ico.png" alt="" class="img-fluid">
+						</figure>
+						<div class="text">
+							<span class="text-uppercase">Collections</span>
+							<h3>Children</h3>
+						</div>
+					</a>
+				</div>
+				<div class="col-sm-6 col-md-6 col-lg-4 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="200">
+					<a class="block-2-item" href="#">
+						<figure class="image">
+							<img src="{$basePath}/images/admin-woman-ico.png" alt="" class="img-fluid">
+						</figure>
+						<div class="text">
+							<span class="text-uppercase">Collections</span>
+							<h3>Men</h3>
+						</div>
+					</a>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+*}
+
+<script>
+    $(function() {
+
+
+
+        var priceSliderRange = function () {
+
+            $("#price-range").slider({
+                range: true,
+                min: {$limitMin},
+                max: {$limitMax},
+                values: [{$filterMin}, {$filterMax}],
+                slide: function (event, ui) {
+                    $("#amount-range").val(ui.values[0] + "Kč" + " - " + ui.values[1] + "Kč");
+                },
+                change: function (event, ui) {
+                    var form = $(this).closest('form');
+                    $(form).submit();
+                }
+
+            });
+
+            $("#amount-range").val($("#price-range").slider("values", 0) + "Kč" + " - " + $("#price-range").slider("values", 1) + "Kč");
+
+        };
+
+        var priceRange = $.nette.ext('priceRange');
+        priceRange.poke = {$filterMax};
+        priceRange.limitMin = {$limitMin};
+        priceRange.limitMax = {$limitMax};
+        priceRange.filterMin = {$filterMin};
+        priceRange.filterMax = {$filterMax};
+
+
+
+
+//        priceSliderRange();
+
+/*
+        $.nette.ext('slider', {
+            init: function () {
+                priceSliderRange();
+
+            },
+
+            success: function (payload) {
+                console.log("slider JO");
+
+		        priceSliderRange();
+
+                // console.log(payload);
+            }
+        });
+*/
+
+
+
+
+
+//        priceSliderRange();
+    });
+</script>

@@ -1,0 +1,30 @@
+<div class="products row" n:if="$products">
+
+	<div n:foreach="$products as $product" class="col-sm-4 col-lg-4 col-md-4">
+		<div class="thumbnail">
+			<a href="{plink ':Catalog:Product:detail', $product->id}"></a>
+
+			<img n:if="$product->photo" n:img="$product->photo->namespace/$product->photo->filename, 320x240, fill" class="attachment-img">
+			<img n:if="!$product->photo" src="http://placehold.it/320x240?text=No preview" alt="">
+
+			<div class="caption">
+				<h4 class="pull-right">{$product->price|number:0:',':' '} Kč</h4>
+				<h4>{$product->title}</h4>
+				<p>{$product->description}</p>
+			</div>
+			{*
+			<div class="ratings">
+				<p class="pull-right">15 reviews</p>
+				<p>
+					<span class="glyphicon glyphicon-star"></span>
+					<span class="glyphicon glyphicon-star"></span>
+					<span class="glyphicon glyphicon-star"></span>
+					<span class="glyphicon glyphicon-star"></span>
+					<span class="glyphicon glyphicon-star"></span>
+				</p>
+			</div>
+			*}
+		</div>
+	</div>
+
+</div>

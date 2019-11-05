@@ -1,0 +1,26 @@
+{if $paginator->pageCount > 1}
+	<nav aria-label="navigation">
+		<ul class="pagination">
+			{if $paginator->isFirst()}
+				<li class="disabled page-item"><span class="page-link"><i class="fa fa-angle-left"></i></span></li>
+			{else}
+				<li class="page-item"><a href="{link $handle, 'page' => $paginator->page - 1}" rel="prev" n:class="$useAjax ? 'ajax page-link'"><i class="fa fa-angle-left"></i></a></li>
+			{/if}
+
+			{foreach $steps as $step}
+				{if $step == $paginator->page}
+					<li class="page-item active"><span class="page-link">{$step}</span></li>
+				{else}
+					<li class="page-item"><a href="{link $handle, 'page' => $step}" n:class="$useAjax ? 'ajax page-link'">{$step}</a></li>
+				{/if}
+				{if $iterator->nextValue > $step + 1}<li class="disabled page-item"><span class="page-link">…</span></li>{/if}
+			{/foreach}
+
+			{if $paginator->isLast()}
+				<li class="disabled page-item"><span class="page-link"><i class="fa fa-angle-right"></i></span></li>
+			{else}
+				<li class="page-item"><a href="{link $handle, 'page' => $paginator->page + 1}" rel="next" n:class="$useAjax ? 'ajax page-link'"><i class="fa fa-angle-right"></i></a></li>
+			{/if}
+		</ul>
+	</nav>
+{/if}

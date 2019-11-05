@@ -1,0 +1,34 @@
+{block headerTitle}Správa produktů kategorie{/block}
+{block headerSmallTitle}{$category->title}{/block}
+
+{block content}
+
+
+<div class="box box-solid bg-blue-gradient">
+	<div class="box-header">
+		<i class="fa fa-archive"></i>
+
+		<h3 class="box-title">Seznam produktů</h3>
+		<div class="pull-right box-tools">
+			<span class="label label-info">{_catalogAdmin.products, $category->products->count()}</span>
+			<div class="btn-group">
+				<button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-bars"></i></button>
+				<ul class="dropdown-menu pull-right" role="menu">
+					<li><a n:href="Product:addToCategory $category->id">Přidat produkt</a></li>
+					<li><a n:href="removeCategory $category->id">Smazat kategorii</a></li>
+					<li class="divider"></li>
+					<li><a href="#">View calendar</a></li>
+				</ul>
+			</div>
+			<button type="button" class="btn btn-info btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
+		</div>
+		<!-- /. tools -->
+	</div>
+	<div class="box-body no-padding" style="display: block;">
+		{control categoryProductGrid}
+	</div>
+</div>
+
+
+
+

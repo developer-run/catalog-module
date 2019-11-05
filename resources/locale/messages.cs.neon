@@ -1,0 +1,32 @@
+productManagement: Správa produktů
+products: jeden produkt|%count% produkty|%count% produktů
+
+
+modules:
+	catalog: Katalog
+	name: Katalog
+	title: "Manage products, edit catalog..."
+
+catalog:
+	name: Seznam kategorií
+	title: Správa kategorie a produktů...
+
+orders:
+	name: Objednávky
+	title: Přehled objednávek...
+
+
+catalogCategory:
+	status:
+		all: všechny
+		enable: aktivní
+		disable: neaktivní
+
+catalogProduct:
+	name: Seznam produktů
+	title: Správa produktů...
+	status:
+		all: všechny
+		enable: aktivní
+		disable: neaktivní
+

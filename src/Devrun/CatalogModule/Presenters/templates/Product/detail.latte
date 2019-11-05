@@ -1,0 +1,16 @@
+{layout /var/www/html/devrun/devrun/app/modules/front-module/src/FrontModule/Presenters/templates/@layout.latte}
+
+
+{block content}
+
+<div class="thumbnail">
+
+	<a n:if="$product->photo" href="{img $product->photo->namespace/$product->photo->filename}" data-lightbox="{$product->photo->namespace}" data-title="{$product->photo->description}">
+		<img n:img="$product->photo->namespace/$product->photo->filename, 640x480, fill" class="img-responsice">
+	</a>
+	<img n:if="!$product->photo" src="http://placehold.it/640x480?text=No preview" alt="">
+
+	<h1>{$product->title}</h1>
+	<p>{$product->price|number:0:',':' '} Kč</p>
+	<p>{$product->description}</p>
+</div>

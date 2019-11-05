@@ -1,0 +1,96 @@
+<div class="search-area">
+    {form fulltextSearch}
+        {input term}
+        <button n:name="send"><i class="fa fa-search" aria-hidden="true"></i></button>
+    {/form}
+</div>
+
+<script>
+    $( function() {
+
+        $.nette.ext('searchControl', {
+            success: function (payload) {
+
+                if (payload.redirect) {
+//                    window.location.href = payload.redirect;
+//                    return false;
+                }
+            }
+        });
+
+
+
+        $.widget( "custom.catcomplete", $.ui.autocomplete, {
+            _create: function() {
+                this._super();
+                this.widget().menu( "option", "items", "> :not(.ui-autocomplete-category)" );
+            },
+            _renderMenu: function (ul, items) {
+                var that = this;
+                var currentCategory = "";
+                $.each(items, function (index, item) {
+                    var li;
+                    if (item.category != currentCategory) {
+                        ul.append("<li class='ui-autocomplete-category'>" + item.category + "</li>");
+                        currentCategory = item.category;
+                    }
+                    li = that._renderItemData(ul, item);
+
+                    if (item.category) {
+                        li.attr("aria-label", item.category + " : " + item.label);
+                    }
+
+                    if (item.category == 'product') {
+                        li.html(function () {
+                            return '<a class="ajax" href="' + item.link + '"><img alt="category" src="' + item.img + '"> ' + $(this).text() + '</a>';
+                        });
+
+                    } else if (item.category == 'category') {
+                        li.html(function () {
+                            return '<a class="ajax" href="' + item.link + '">' + $(this).text() + '</a>';
+                        });
+                    }
+
+                    li.hover(function() {
+                        $('.ui-autocomplete-input').val($( this ).text());
+
+//                        $( this ).text();
+                    });
+
+
+                });
+            }
+        });
+
+
+        $( "#headerSearch" ).catcomplete({
+            delay: 30,
+            minLength: 2,
+            {*source: {link search!},*}
+            source: function( request, response ) {
+                $.nette.ajax({
+                    off: ['spinner'],
+                    dataType: "json",
+                    url: {link search!},
+                    data: { term: request.term },
+                    success: response
+                });
+
+            },
+            select: function( event, ui ) {
+
+                // not call, because link is ajax class
+                if (ui.item.category == 'product' || ui.item.category == 'category') {
+                    console.log("SELECT");
+//                    $.nette.load();
+                }
+
+                console.log(ui);
+//                log( "Selected: " + ui.item.value + " aka " + ui.item.id );
+            }
+        }).focus(function () {
+            $(this).catcomplete("search");
+        });
+
+    } );
+</script>

@@ -1,0 +1,16 @@
+{block content}
+
+<div class="form-group text-center">
+	<div class="thumbnail">
+		<a href="{img $image->namespace/$image->filename}" data-lightbox="{$image->namespace}" data-title="{$image->description}">
+			<img n:img="$image->namespace/$image->filename, 640x480, fill" class="attachment-img">
+		</a>
+
+	</div>
+</div>
+
+<div class="form-group text-center">
+	{control imageForm}
+
+</div>
+

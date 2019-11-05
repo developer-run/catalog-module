@@ -1,0 +1,65 @@
+{block headerTitle}Nastavení produktu{/block}
+{block headerSmallTitle}{$product->title}{/block}
+{block breadcrumb}
+	<li n:block="breadcrumbItems"><a n:href=":Cms:Dashboard:"><i class="fa fa-dashboard"></i> {_admin.home}</a></li>
+	<li><a n:href=":Cms:Catalog:Category:edit $categoryId"><i class="fa fa-list"></i> Seznam produktů v kategorii</a></li>
+	<li class="active">product {$product->id}</li>
+{/block}
+
+{block content}
+
+	<div class="nav-tabs-custom">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="#tab_1" data-toggle="tab">Základní nastavení</a></li>
+			<li><a href="#tab_2" data-toggle="tab">Náhled</a></li>
+			<li class="pull-right"><a href="#" class="text-muted"><i class="fa fa-gear"></i></a></li>
+		</ul>
+		<div class="tab-content">
+			<div class="tab-pane active well" id="tab_1">
+				{control productForm}
+			</div>
+			<!-- /.tab-pane -->
+			<div class="tab-pane well" id="tab_2">
+				<div class="row" n:snippet="images">
+					<div n:foreach="$images as $image" class="col-md-2">
+
+						<div class="attachment-block clearfix{if $image->main} bg-purple{/if}">
+							{*<img class="attachment-img" src="http://placehold.it/150x100">*}
+
+							<a href="{$basePath}/media/{$this->_imgStorage->fromIdentifier($image->identifier)->identifier}" data-lightbox="{$image->namespace}" data-title="{$image->description}">
+								<img n:img="$image->identifier, '200x200', fill" class="attachment-img">
+							</a>
+
+							<div n:if="!$image->main" class="attachment-pushed">
+								<h4 class="attachment-heading">
+									<small>{$image->name|truncate:20}</small>
+								</h4>
+								<div class="attachment-text">
+									<small n:if="$image->description">{$image->description}<br></small>
+									<small>{$image->width}x{$image->height}</small>
+								</div>
+							</div>
+
+							<div n:if="$image->main" class="attachment-pushed">
+								<small>{$image->name|truncate:20}</small>
+								<small n:if="$image->description">{$image->description}<br></small>
+								<small>{$image->width}x{$image->height}</small>
+							</div>
+						</div>
+						<a n:href="imageEdit $image->id" class="btn btn-default btn-xs"
+													  data-popup-type='modal-md'
+													  data-popup-title='Editace obrázku {$image->name}'
+													  data-popup-dialog='popup'><i class="fa fa-pencil-square-o"></i> Edit</a>
+
+						<a n:href="setProductMainImage! $product->id, $image->id" class="ajax btn btn-default btn-xs"><i class="fa fa-ravelry"></i> Hlavní</a>
+						<a n:href="imageDelete! $image->id" class="ajax btn btn-default btn-xs"><i class="fa fa-times"></i> Delete</a>
+					</div>
+
+				</div>
+
+				<hr class="page-header">
+				{control imagesForm}
+			</div>
+		</div>
+	</div>
+{/block}

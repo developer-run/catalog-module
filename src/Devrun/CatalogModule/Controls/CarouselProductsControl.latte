@@ -1,0 +1,85 @@
+{*
+<div n:if="$products" data-slick='{"slidesToShow": 4, "slidesToScroll": 4}'>
+	<div n:foreach="$products as $product">
+		<div class="product-img">
+			<a href="{plink Product:detail $product->id}" class="ajax">
+				<img n:img="$product->images->first()->identifier, '250x250', fill" alt="{$product->name}" style="max-height: 250px">
+				<!-- Hover Thumb -->
+				<img n:if="$product->images->count() > 1" n:img="$product->images->get(1)->identifier, '250x250', fill" style="max-height: 250px" alt="{$product->name}" class="hover-img">
+				<!-- Favourite -->
+
+				*}
+{*
+				<div class="product-favourite">
+					<a href="#" class="favme fa fa-heart"></a>
+				</div>
+				*}{*
+
+			</a>
+		</div>
+		<!-- Product Description -->
+		<div class="product-description">
+			<a href="{plink Product:detail $product->id}" class="ajax">
+				<span>{$product->categories->last()->name}</span>
+				<h6>{$product->name}</h6>
+			</a>
+			<p class="product-price">{$product->price} Kč</p>
+
+			<!-- Hover Content -->
+			<div class="hover-content">
+				<!-- Add to Cart -->
+				*}
+{*
+				<div class="add-to-cart-btn">
+					<a href="#" class="btn essence-btn">Add to Cart</a>
+				</div>
+				*}{*
+
+			</div>
+		</div>
+
+	</div>
+</div>
+*}
+
+
+
+<div n:if="$products" class="popular-products-slides owl-carousel border rounded gradient-vertical mb-30 p-10">
+
+	<!-- Single Product -->
+	<div n:foreach="$products as $product" class="single-product-wrapper">
+		<!-- Product Image -->
+		<div class="product-img">
+			<a href="{plink Product:detail $product->id}" class="ajax">
+			<img n:img="$product->images->first()->identifier, '250x250', fill" alt="{$product->name}" style="max-height: 250px">
+			<!-- Hover Thumb -->
+			<img n:if="$product->images->count() > 1" n:img="$product->images->get(1)->identifier, '250x250', fill" style="max-height: 250px" alt="{$product->name}" class="hover-img">
+			<!-- Favourite -->
+
+			{*
+			<div class="product-favourite">
+				<a href="#" class="favme fa fa-heart"></a>
+			</div>
+			*}
+			</a>
+		</div>
+		<!-- Product Description -->
+		<div class="product-description">
+			<a href="{plink Product:detail $product->id}" class="ajax">
+				<span>{$product->categories->last()->name}</span>
+				<h3 class="h6">{$product->name}</h3>
+			</a>
+			<p class="product-price">{$product->price} Kč</p>
+
+			<!-- Hover Content -->
+			<div class="hover-content">
+				<!-- Add to Cart -->
+				{*
+				<div class="add-to-cart-btn">
+					<a href="#" class="btn essence-btn">Add to Cart</a>
+				</div>
+				*}
+			</div>
+		</div>
+	</div>
+</div>

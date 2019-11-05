@@ -1,0 +1,75 @@
+{block headerTitle}Správa produktů{/block}
+{block headerSmallTitle}kategorie `{$category->name}`{/block}
+{block breadcrumb}
+	<li n:block="breadcrumbItems"><a n:href=":Cms:Dashboard:"><i class="fa fa-dashboard"></i> {_admin.home}</a></li>
+	<li><a n:href=":Cms:Catalog:Default:"><i class="fa fa-list"></i> Seznam kategorií</a></li>
+	<li class="active">kategorie {$category->name}</li>
+{/block}
+
+{block content}
+
+<div class="box box-primary">
+	<div class="box-header">
+		<i class="fa fa-archive"></i>
+		<h3 class="box-title">Nastavení kategorie</h3>
+	</div>
+	<div class="box-body">
+
+		<div class="row">
+			<div class="col-md-4">
+				<figure class="img-responsive img-rounded">
+				{if $image}
+					<a href="{$basePath}/media/{$this->_imgStorage->fromIdentifier($image->identifier)->identifier}" data-lightbox="{$image->namespace}">
+						<img n:img="$image->identifier, '250x250', fill" class="attachment-img">
+					</a>
+				{else}
+					<img class="attachment-img" src="http://placehold.it/150x100">
+				{/if}
+				</figure>
+			</div>
+			<div class="col-md-8">
+				{control categoryForm}
+			</div>
+		</div>
+
+	</div>
+</div>
+
+
+
+<div class="grido">
+	<div class="table table-responsive">
+		{control categoryProductsGridControl}
+
+	</div>
+</div>
+
+
+{*
+<div class="box box-primary">
+	<div class="box-header">
+		<i class="fa fa-archive"></i>
+
+		<h3 class="box-title">Seznam produktů</h3>
+		<div class="pull-right box-tools">
+			<span class="label label-info">{_catalogAdmin.products, $category->products->count()}</span>
+			<div class="btn-group">
+				<button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-bars"></i></button>
+				<ul class="dropdown-menu pull-right" role="menu">
+					<li><a n:href="Product:addToCategory $category->id">Přidat produkt</a></li>
+					<li><a n:href="removeCategory $category->id">Smazat kategorii</a></li>
+					<li class="divider"></li>
+					<li><a href="#">View calendar</a></li>
+				</ul>
+			</div>
+			<button type="button" class="btn btn-info btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
+		</div>
+		<!-- /. tools -->
+	</div>
+	<div class="box-body no-padding">
+		<div class="grido">
+			{control categoryProductsGridControl}
+		</div>
+	</div>
+</div>
+*}

@@ -1,0 +1,43 @@
+{
+  "name": "devrun/catalog-module",
+  "description": "DevRun Catalog module",
+  "keywords": ["cms", "catalog", "devrun", "module"],
+  "type": "module",
+  "homepage": "http://devrun.cz",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Pavel Paulík",
+      "email": "pavel.paulik@support.etnetera.cz"
+    }
+  ],
+  "require": {
+    "devrun/cms-module": "0.8.*"
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/developer-run/framework"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/developer-run/cms-module"
+    }
+  ],
+  "autoload": {
+    "classmap": ["src/"]
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "0.1-dev"
+    },
+    "devrun": {
+      "installers" : ["Devrun\\Module\\Installers\\MigrationInstaller"],
+      "configuration": {
+        "extensions": {
+          "catalog": "Devrun\\CatalogModule\\DI\\CatalogExtension"
+        }
+      }
+    }
+  }
+}
