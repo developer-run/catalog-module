@@ -1,62 +1,7 @@
 translation:
 	dirs: ['%modules.catalog.path%/resources/translations']
 
-services:
-
-#	cms.catalog.form.image:
-#		class: Devrun\CmsModule\CatalogModule\Forms\IImageFormFactory
-#		setup: [create, bootstrap3Render]
-#		inject: true
-
-
-	cms.catalog.presenters.default:
-		class: Devrun\CmsModule\CatalogModule\Presenters\DefaultPresenter
-		tags: [devrun.presenter, administration: [
-			category: modules.catalog
-			name: messages.catalog.name
-			description: messages.catalog.title
-
-			link: ':Cms:Catalog:Default:default'
-			icon: fa-server
-			priority: 30
-		]]
-
-
-	cms.catalog.presenters.product:
-		class: Devrun\CmsModule\CatalogModule\Presenters\ProductPresenter
-		tags: [devrun.presenter, administration: [
-			category: modules.catalog
-			name: messages.catalogProduct.name
-			description: messages.catalogProduct.title
-
-			link: ':Cms:Catalog:Product:default'
-			icon: fa-server
-			priority: 30
-		]]
-
-
-	cms.catalog.presenters.orders:
-		class: Devrun\CmsModule\CatalogModule\Presenters\OrdersPresenter
-		tags: [devrun.presenter, administration: [
-			category: modules.catalog
-			name: messages.orders.name
-			description: messages.orders.title
-
-			link: ':Cms:Catalog:Orders:default'
-			icon: fa-credit-card
-			priority: 40
-		]]
-
-	cms.catalog.presenters.feed:
-		class: Devrun\CmsModule\CatalogModule\Presenters\FeedPresenter
-		tags: [devrun.presenter, administration: [
-			category: modules.catalog
-			name: messages.feed.name
-			description: messages.feed.title
-
-			link: ':Cms:Catalog:Feed:default'
-			icon: fa-credit-card
-			priority: 40
-		]]
-
+includes:
+	- authorizator.neon
+	- presenters.neon
 

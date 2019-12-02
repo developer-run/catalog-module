@@ -1,0 +1,33 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Update info</title>
+    <style>
+        body {
+            background: whitesmoke;
+        }
+    </style>
+</head>
+<body>
+<p>Dobrý den,</p>
+<p>Provedené úpravy {$time}</p>
+
+<table style="box-shadow: 1px 1px 12px -1px rgba(0,0,0,.2); background:#fff;border-radius: 4px;border-spacing: 0;border: 1px solid#CACACA;text-align: left;width: 100%;">
+    <thead style="font-size: 1.15em;">
+    <tr>
+        <th style="font-size: 90%; vertical-align: middle; border-top: 0; border-bottom: 1px solid #CACACA; padding: 3px 6px;background: -webkit-linear-gradient(top, #FAFAFA 0%,#E9E9E9 100%);">Nové produkty</th>
+        <th style="font-size: 90%; vertical-align: middle; border-top: 0; border-bottom: 1px solid #CACACA; padding: 3px 6px;background: -webkit-linear-gradient(top, #FAFAFA 0%,#E9E9E9 100%);">Upravené produkty</th>
+        <th style="font-size: 90%; vertical-align: middle; border-top: 0; border-bottom: 1px solid #CACACA; padding: 3px 6px;background: -webkit-linear-gradient(top, #FAFAFA 0%,#E9E9E9 100%);">Smazané produkty</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr n:for="$i = 0; $i < $lines; $i++" style="{if $i % 2 == 0}background-color: #f9f9f9;{/if} vertical-align: middle;height: 20px;padding: 5px; line-height: 1.42857143;">
+        <td style="vertical-align: middle;height: 20px;padding: 5px; line-height: 1.42857143;">{if $i < count($news)}<small>id:{$news[$i]->id}</small> {$news[$i]->product} <small style="color: blue;">({$news[$i]->price_vat}Kč)</small>{/if}</td>
+        <td style="vertical-align: middle;height: 20px;padding: 5px; line-height: 1.42857143;">{if $i < count($updated)}<small>id:{$updated[$i]->id}</small> {$updated[$i]->product} <small style="color: blue;">({$updated[$i]->price_vat}Kč)</small>{/if}</td>
+        <td style="vertical-align: middle;height: 20px;padding: 5px; line-height: 1.42857143;">{if $i < count($removed)}<small>id:{$removed[$i]->id}</small> {$removed[$i]->name} <small style="color: blue;">({$removed[$i]->price}Kč)</small>{/if}</td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

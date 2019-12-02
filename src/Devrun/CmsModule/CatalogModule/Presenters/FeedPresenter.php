@@ -9,42 +9,128 @@
 
 namespace Devrun\CmsModule\CatalogModule\Presenters;
 
+use Devrun\CatalogModule\Managers\IFeedManage;
+use Devrun\CmsModule\CatalogModule\Facades\FeedFacade;
+use Devrun\CmsModule\Controls\DataGrid;
 use Devrun\CmsModule\Presenters\AdminPresenter;
+use Tracy\Debugger;
 
+/**
+ * Class FeedPresenter
+ * @package Devrun\CmsModule\CatalogModule\Presenters
+ */
 class FeedPresenter extends AdminPresenter
 {
 
+    /** @var string */
+    protected $feedXmlUrl;
+
+    /** @var FeedFacade @inject */
+    public $feedFacade;
+
+
+    /**
+     * DI setter
+     * only template info
+     *
+     * @param mixed $feedXmlUrl
+     */
+    public function setFeedXmlUrl($feedXmlUrl)
+    {
+        $this->feedXmlUrl = $feedXmlUrl;
+    }
+
+
+
     public function renderDefault()
     {
-
-        $file = "http://www.bagin.cz/eshop-export-heureka.xml";
-
-        $tempDir = $this->context->parameters['tempDir'];
-        $feedFile = $tempDir . "/feeds/feed.xml";
+        $this->template->feedUrl = $this->feedXmlUrl;
+    }
 
 
-        if (!file_exists($feedFile)) {
-            $fileContent = file_get_contents($file);
 
-            if (!is_dir($dir = $tempDir . '/feeds')) {
-                mkdir($dir);
-            }
+    public function handleSynchronize($url)
+    {
+        $this->feedFacade->getFeedManager()->synchronize($url);;
+    }
 
-            file_put_contents($feedFile, $fileContent);
+
+    /**
+     * @throws \Exception
+     */
+    public function handleUpdate()
+    {
+        $this->feedFacade->update();
+        try {
+            $this->flashMessage('Updatováno', 'info');
+
+        } catch (\Exception $e) {
+            $this->flashMessage("Nepodařilo se updatovat {$e->getMessage()}", 'danger');
+            Debugger::log($e);
         }
 
-
-        $xmlstring = file_get_contents($feedFile);
-
-
-        $xml = simplexml_load_string($xmlstring);
-        $json = json_encode($xml);
-        $array = json_decode($json,TRUE);
+        $this->ajaxRedirect();
+    }
 
 
-        dump($array);
-        die();
 
+    /**
+     * @param DataGrid $grid
+     */
+    protected function createDataGrid(DataGrid $grid)
+    {
+        $grid->useHappyComponents(true);
+    }
+
+
+    /**
+     * @param DataGrid $grid
+     */
+    protected function createDataGridColumns(DataGrid $grid)
+    {
+        $grid->addColumnLink('id', 'ID', 'detail')
+             ->setSortable()
+             ->setFilterText();
+    }
+
+
+    /**
+     * @param DataGrid $grid
+     * @throws \Ublaboo\DataGrid\Exception\DataGridException
+     */
+    protected function createDataGridActions(DataGrid $grid)
+    {
+        $grid->addAction('synchronize', 'Synchronize', 'synchronize!', ['url'])
+             ->setIcon('american-sign-language-interpreting')
+             ->setClass('_ajax btn btn-xs btn-primary');
+    }
+
+
+    /**
+     * @param $name
+     * @return \Devrun\CmsModule\Controls\DataGrid
+     * @throws \Ublaboo\DataGrid\Exception\DataGridException
+     */
+    protected function createComponentFeedGridControl($name)
+    {
+        $grid = $this->createGrid($name);
+
+        $this->createDataGrid($grid);
+        $grid->setDataSource($this->getDataSource());
+        $this->createDataGridColumns($grid);
+        $this->createDataGridActions($grid);
+
+        $grid->addToolbarButton('update!', 'Update');
+        return $grid;
+    }
+
+
+    /**
+     * @return array
+     */
+    protected function getDataSource()
+    {
+        return $this->feedFacade->getFeedManager()->getDataSource();
     }
 
 }

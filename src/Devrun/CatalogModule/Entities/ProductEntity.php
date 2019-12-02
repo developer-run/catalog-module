@@ -37,7 +37,6 @@ use Nette\Utils\DateTime;
  * @method ProductTranslationEntity translate($lang = '', $fallbackToDefault = true)
  * @method getInStock()
  * @method getAmount()
- * @method getActive()
  * @method getPrice()
  */
 class ProductEntity
@@ -84,6 +83,12 @@ class ProductEntity
      */
     public $variants;
 
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=64, nullable=true)
+     */
+    protected $serial;
 
     /**
      * @var string
@@ -185,16 +190,42 @@ class ProductEntity
      */
     public function __construct(Translator $translator, string $name)
     {
+        $this->setDefaultLocale($translator->getDefaultLocale());
+        $this->setCurrentLocale($translator->getLocale());
+
         $this->images     = new ArrayCollection();
         $this->variants   = new ArrayCollection();
         $this->categories = new ArrayCollection();
         $this->setName($name);
-
-
-
-        $this->setDefaultLocale($translator->getDefaultLocale());
-        $this->setCurrentLocale($translator->getLocale());
     }
+
+    /**
+     * @return string
+     */
+    public function getSerial(): string
+    {
+        return $this->serial ?: '';
+    }
+
+    /**
+     * @param string $serial
+     * @return ProductEntity
+     */
+    public function setSerial(string $serial)
+    {
+        $this->serial = hash('sha256', $serial);
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isActive(): bool
+    {
+        return $this->active;
+    }
+
+
 
 
     /**

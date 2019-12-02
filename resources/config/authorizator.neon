@@ -1,0 +1,24 @@
+services:
+	acl:
+		factory: Devrun\Security\Authorizator
+		setup:
+# ------------------------------------------------------ #
+			- addResource(Cms:Catalog:Feed)
+
+# ------------------------------------------------------ #
+			- addResource(Cms:Catalog:FeedReader)
+
+# ------------------------------------------------------ #
+			- addResource(Cms:Catalog:Default)
+
+# ------------------------------------------------------ #
+			- addResource(Cms:Catalog:Category)
+
+# ------------------------------------------------------ #
+			- addResource(Cms:Catalog:Product)
+
+# ------------------------------------------------------ #
+			- addResource(Cms:Catalog:Orders)
+
+# ------------------------------------------------------ #
+

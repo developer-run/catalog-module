@@ -12,7 +12,9 @@
     }
   ],
   "require": {
-    "devrun/cms-module": "0.8.*"
+    "devrun/cms-module": "v0.8.*",
+    "ext-simplexml": "*",
+    "ext-iconv": "*"
   },
   "repositories": [
     {

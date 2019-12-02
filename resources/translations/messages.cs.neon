@@ -15,6 +15,9 @@ orders:
 	name: Objednávky
 	title: Přehled objednávek...
 
+feed:
+	name: Čtečka
+	title: Správa produktů
 
 catalogCategory:
 	status:
