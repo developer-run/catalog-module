@@ -38,8 +38,8 @@ class SitemapRepository
     public function getSitemap()
     {
         $result     = array();
-        $categories = $this->catalogRepository->findBy(array());
-        $products   = $this->productRepository->findBy(array(), null);
+        $categories = $this->catalogRepository->findBy(array('deletedBy' => null));
+        $products   = $this->productRepository->findBy(array('deletedBy' => null), null);
         $variants   = $this->productVariantRepository->findBy(array());
 
 
