@@ -132,6 +132,9 @@ class CatalogExtension extends CompilerExtension implements IEntityProvider, IPr
             ->setType('Devrun\CatalogModule\Repositories\ProductImageRepository')
             ->addTag(OrmExtension::TAG_REPOSITORY_ENTITY, ProductImageEntity::class);
 
+        $builder->addDefinition($this->prefix('repository.sitemap'))
+                ->setType('Devrun\CatalogModule\Repositories\SitemapRepository');
+
 
         /*
          * forms factory

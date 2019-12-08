@@ -89,6 +89,14 @@ class ProductQuery extends QueryObject
         return $this;
     }
 
+    public function notDeleted()
+    {
+        $this->filter[] = function (Kdyby\Doctrine\QueryBuilder $qb) {
+            $qb->andWhere('q.deletedBy IS NULL');
+        };
+        return $this;
+    }
+
     /**
      * @return $this
      */

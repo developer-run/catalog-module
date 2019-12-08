@@ -18,7 +18,7 @@ use Kdyby\Doctrine\Entities\MagicAccessors;
 
 /**
  * Class ImagesEntity
- * @ORM\Cache(region="product_images")
+ * @ORM\Cache(region="product_images", usage="NONSTRICT_READ_WRITE")
  * @ORM\Entity(repositoryClass="Devrun\CatalogModule\Repositories\ProductImageRepository")
  * @ORM\Table(name="catalog_product_images", indexes={
  *     @ORM\Index(name="name_idx", columns={"name"}),

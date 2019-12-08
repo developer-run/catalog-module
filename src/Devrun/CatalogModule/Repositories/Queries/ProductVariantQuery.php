@@ -46,6 +46,7 @@ class ProductVariantQuery extends QueryObject
 
                 ->where('v = q')
                 ->andWhere('c1 = :category')
+                ->andWhere('p1.deletedBy IS NULL')
 //                ->andWhere("CASE WHEN v.id > 0 THEN v.name ELSE true END = 'Barva'")
 
 

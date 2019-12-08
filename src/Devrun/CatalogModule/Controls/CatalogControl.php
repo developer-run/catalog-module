@@ -250,12 +250,13 @@ class CatalogControl extends \Devrun\Application\UI\Control\Control
     private function getLimit()
     {
         $query = $this->productRepository->createQueryBuilder('e')
-            ->select('MIN(e.price) AS minimum, MAX(e.price) AS maximum');
+            ->select('MIN(e.price) AS minimum, MAX(e.price) AS maximum')
+            ->andWhere('e.deletedBy IS NULL');
 
         if ($category = $this->filter->getCategory()) {
             $query
                 ->join('e.categories', 'c')
-                ->where('c = :id')->setParameter('id', $this->filter->getCategory());
+                ->andWhere('c = :id')->setParameter('id', $this->filter->getCategory());
         }
         if ($term = $this->filter->getSearchTerm()) {
             $query
@@ -434,6 +435,7 @@ class CatalogControl extends \Devrun\Application\UI\Control\Control
         $template->variants = $this->getVariantList();
 
         $query = (new ProductQuery())->filtered($filter)
+            ->notDeleted()
             ->withCategories()
             ->withImages()
             ->withVariants()
