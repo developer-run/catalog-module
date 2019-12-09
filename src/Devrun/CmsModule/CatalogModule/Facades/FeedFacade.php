@@ -178,8 +178,8 @@ class FeedFacade
             $maxLimit = $this->options['new']['limit'];
 
             $this->feedManager
-                ->setPageCatalogListEntity($this->pageRepository->findOneBy(['name' => 'front:cataloglist:default']))
-                ->setPageProductDetailEntity($this->pageRepository->findOneBy(['name' => 'front:product:default']))
+                ->setPageCatalogListEntity($this->pageRepository->findOneBy(['name' => 'front:catalogue:list']))
+                ->setPageProductDetailEntity($this->pageRepository->findOneBy(['name' => 'front:product:detail']))
                 ->setPackageEntity($this->getUsePackageEntity());
 
             foreach ($items as $item) {
@@ -205,8 +205,8 @@ class FeedFacade
             $maxLimit = $this->options['update']['limit'];
 
             $this->feedManager
-                ->setPageCatalogListEntity($this->pageRepository->findOneBy(['name' => 'front:cataloglist:default']))
-                ->setPageProductDetailEntity($this->pageRepository->findOneBy(['name' => 'front:product:default']))
+                ->setPageCatalogListEntity($this->pageRepository->findOneBy(['name' => 'front:catalogue:list']))
+                ->setPageProductDetailEntity($this->pageRepository->findOneBy(['name' => 'front:product:detail']))
                 ->setPackageEntity($this->getUsePackageEntity());
 
             foreach ($items as $item) {
