@@ -51,8 +51,14 @@ class CatalogExtension extends CompilerExtension implements IEntityProvider, IPr
                 'limit' => 2,
                 'enable' => true,
             ],
-            'emailSend' => !"%debugMode%",
         ],
+        'email' => [
+            'send' => !"%debugMode%",
+            'from' => 'Franta <example@email.com>',
+            'to' => 'email@email.com',
+            'subject' => 'aktualizace',
+        ],
+
 
     );
 
@@ -208,7 +214,7 @@ class CatalogExtension extends CompilerExtension implements IEntityProvider, IPr
          * listeners
          */
         $builder->addDefinition($this->prefix('listeners.feed'))
-                ->setFactory(Devrun\CatalogModule\Listeners\FeedListener::class, [$config['update']['emailSend']])
+                ->setFactory(Devrun\CatalogModule\Listeners\FeedListener::class, [$config['email']])
                 ->addTag(EventsExtension::TAG_SUBSCRIBER);
 
 

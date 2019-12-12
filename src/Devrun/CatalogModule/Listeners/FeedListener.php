@@ -21,21 +21,21 @@ class FeedListener implements Subscriber
     /** @var Nette\Bridges\ApplicationLatte\Template */
     private $templateFactory;
 
-    /** @var bool */
-    private $emailSend = true;
+    /** @var array */
+    private $email = [];
 
 
     /**
      * FeedListener constructor.
-     * @param $emailSend
+     * @param $email
      * @param IMailer $mailer
      * @param Nette\Application\LinkGenerator $linkGenerator
      * @param Nette\Application\UI\ITemplateFactory $templateFactory
      */
-    public function __construct($emailSend, IMailer $mailer, Nette\Application\LinkGenerator $linkGenerator, Nette\Application\UI\ITemplateFactory $templateFactory)
+    public function __construct(array $email, IMailer $mailer, Nette\Application\LinkGenerator $linkGenerator, Nette\Application\UI\ITemplateFactory $templateFactory)
     {
         $this->mailer          = $mailer;
-        $this->emailSend       = $emailSend;
+        $this->email           = $email;
         $this->linkGenerator   = $linkGenerator;
         $this->templateFactory = $templateFactory;
     }
@@ -43,20 +43,24 @@ class FeedListener implements Subscriber
 
     public function onUpdate(FeedFacade $class, array $toNew, array $toUpdate, array $toRemove)
     {
-        $template = $this->createTemplate();
-        $template->setFile(__DIR__ . '/email.latte');
-        $template->time    = date("j. n. Y H:i:s");
-        $template->news    = $toNew;
-        $template->updated = $toUpdate;
-        $template->removed = $toRemove;
-        $template->lines   = max(count($toNew), count($toUpdate), count($toRemove));
+        if ($this->email['send']) {
+            $template = $this->createTemplate();
+            $template->setFile(__DIR__ . '/email.latte');
+            $template->time    = date("j. n. Y H:i:s");
+            $template->news    = $toNew;
+            $template->updated = $toUpdate;
+            $template->removed = $toRemove;
+            $template->lines   = max(count($toNew), count($toUpdate), count($toRemove));
 
-        $mail = new Message();
-        $mail->setFrom('Franta Update <ulozdo@info.cz>')
-//             ->setHtmlBody($latte->renderToString($template, $params));
-             ->setHtmlBody($template);
+            $mail = (new Message())
+                ->setFrom($this->email['from'])
+                ->addTo($this->email['to'])
+                ->setSubject($this->email['subject'])
+                //             ->setHtmlBody($latte->renderToString($template, $params));
+                ->setHtmlBody($template);
 
-        $this->mailer->send($mail);
+            $this->mailer->send($mail);
+        }
     }
 
 
@@ -79,8 +83,6 @@ class FeedListener implements Subscriber
      */
     public function getSubscribedEvents()
     {
-        return $this->emailSend
-            ? [FeedFacade::FEED_EVENT]
-            : [];
+        return [FeedFacade::FEED_EVENT];
     }
 }
