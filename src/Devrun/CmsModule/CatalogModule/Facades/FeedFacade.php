@@ -184,7 +184,7 @@ class FeedFacade
 
             foreach ($items as $item) {
                 if ($maxLimit-- == 0) break;
-//                $this->feedManager->synchronize($item->id);
+                $this->feedManager->synchronize($item->id);
                 $news[] = $item;
             }
         }
@@ -212,7 +212,7 @@ class FeedFacade
             foreach ($items as $item) {
                 if ($maxLimit-- == 0) break;
 
-//                $this->feedManager->synchronize($item->id);
+                $this->feedManager->synchronize($item->id);
                 $updated[] = $item;
             }
         }
