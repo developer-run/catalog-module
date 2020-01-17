@@ -9,7 +9,7 @@
 
 namespace Devrun\CatalogModule\Repositories;
 
-use Devrun\Doctrine\Repositories\EntityRepositoryTrait;
+use Devrun\DoctrineModule\Repositories\EntityRepositoryTrait;
 use Gedmo\Tree\Traits\Repository\ORM\NestedTreeRepositoryTrait;
 use Kdyby\Doctrine\EntityManager;
 use Kdyby\Doctrine\EntityRepository;

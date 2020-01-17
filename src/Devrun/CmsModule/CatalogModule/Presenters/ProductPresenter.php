@@ -20,6 +20,7 @@ use Devrun\CmsModule\Facades\ImageManageFacade;
 use Devrun\CmsModule\Forms\DevrunForm;
 use Devrun\CmsModule\Presenters\AdminPresenter;
 use Devrun\Utils\Pattern;
+use Kdyby\Doctrine\QueryBuilder;
 use Nette\Forms\Container;
 use Nette\Forms\Form;
 use Nette\Http\FileUpload;
@@ -356,8 +357,10 @@ class ProductPresenter extends AdminPresenter
 
         $query = $this->catalogFacade->getProductRepository()->createQueryBuilder('e')
             ->addSelect('i')
+            ->addSelect('u')
             ->leftJoin('e.categories', 'c')
             ->leftJoin('e.images', 'i')
+            ->leftJoin('e.deletedBy', 'u')
 //            ->andWhere('c.id = :category')->setParameter('category', $this->categoryEntity->getId())
         ;
 
@@ -378,6 +381,23 @@ class ProductPresenter extends AdminPresenter
                 return $html;
 
             });
+
+        $grid->setColumnsHideable();
+
+        $grid->addColumnDateTime('inserted', 'Vloženo')
+            ->setSortable()
+            ->setDefaultHide()
+            ->setFilterDate();
+
+        $grid->addColumnText('deletedBy', 'Smazáno')
+            ->setSortable(true)
+            ->setSortableCallback(function (QueryBuilder $queryBuilder, $value) {
+                $queryBuilder->addOrderBy('u.username', $value['deletedBy']);
+            })
+            ->setDefaultHide()
+            ->setFilterText();
+        ;
+
 
         $grid->addColumnLink('name', 'Název', 'Product:edit')
 //            ->addParameters(['categoryId' => $this->template->category->id])

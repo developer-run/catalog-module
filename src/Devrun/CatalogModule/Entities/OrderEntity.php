@@ -9,10 +9,10 @@
 
 namespace Devrun\CatalogModule\Entities;
 
-use Devrun\Doctrine\Entities\BlameableTrait;
-use Devrun\Doctrine\Entities\DateTimeTrait;
-use Devrun\Doctrine\Entities\IdentifiedEntityTrait;
-use Devrun\Doctrine\Entities\UserEntity;
+use Devrun\CmsModule\Entities\BlameableTrait;
+use Devrun\CmsModule\Entities\UserEntity;
+use Devrun\DoctrineModule\Entities\DateTimeTrait;
+use Devrun\DoctrineModule\Entities\IdentifiedEntityTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Kdyby\Doctrine\Entities\MagicAccessors;
 
@@ -44,7 +44,7 @@ class OrderEntity
 
     /**
      * @var UserEntity
-     * @ORM\ManyToOne(targetEntity="Devrun\Doctrine\Entities\UserEntity")
+     * @ORM\ManyToOne(targetEntity="Devrun\CmsModule\Entities\UserEntity")
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $user;

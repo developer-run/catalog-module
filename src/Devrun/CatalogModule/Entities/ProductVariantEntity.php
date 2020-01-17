@@ -9,8 +9,7 @@
 
 namespace Devrun\CatalogModule\Entities;
 
-use Devrun\Doctrine\Entities\IdentifiedEntityTrait;
-use Devrun\Doctrine\Entities\NestedEntityTrait;
+use Devrun\DoctrineModule\Entities\IdentifiedEntityTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;

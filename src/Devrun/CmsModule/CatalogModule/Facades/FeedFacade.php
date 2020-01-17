@@ -10,7 +10,7 @@ use Devrun\CatalogModule\Repositories\ProductRepository;
 use Devrun\CmsModule\CatalogModule\Managers\BagInFeed;
 use Devrun\CmsModule\Entities\PackageEntity;
 use Devrun\CmsModule\Repositories\PageRepository;
-use Devrun\Doctrine\Repositories\UserRepository;
+use Devrun\CmsModule\Repositories\UserRepository;
 use Devrun\Security\User;
 use Kdyby\Doctrine\EntityManager;
 use Nette\SmartObject;

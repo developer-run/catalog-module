@@ -9,18 +9,17 @@
 
 namespace Devrun\CatalogModule\Entities;
 
+use Devrun\CmsModule\Entities\BlameableTrait;
 use Devrun\CmsModule\Entities\RouteEntity;
-use Devrun\Doctrine\Entities\Attributes\Translatable;
-use Devrun\Doctrine\Entities\NestedEntityTrait;
+use Devrun\DoctrineModule\Entities\Attributes\Translatable;
+use Devrun\DoctrineModule\Entities\DateTimeTrait;
+use Devrun\DoctrineModule\Entities\IdentifiedEntityTrait;
+use Devrun\DoctrineModule\Entities\NestedEntityTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
-use Devrun\Doctrine\Entities\BlameableTrait;
-use Devrun\Doctrine\Entities\DateTimeTrait;
-use Devrun\Doctrine\Entities\IdentifiedEntityTrait;
 use Kdyby\Doctrine\Entities\MagicAccessors;
 use Kdyby\Translation\Translator;
-use Nette\Object;
 
 /**
  * Class CategoryEntity
@@ -37,7 +36,7 @@ use Nette\Object;
  * @method CategoryTranslationEntity translate($lang = '', $fallbackToDefault = true)
  * @method getActive()
  */
-class CategoryEntity extends Object
+class CategoryEntity
 {
 
     use IdentifiedEntityTrait;

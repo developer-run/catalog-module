@@ -9,15 +9,13 @@
 
 namespace Devrun\CatalogModule\Entities;
 
-use Devrun\CmsModule\Entities\IImage;
+use Devrun\CmsModule\Entities\BlameableTrait;
 use Devrun\CmsModule\Entities\RouteEntity;
-use Devrun\Doctrine\Entities\ImageTrait;
+use Devrun\DoctrineModule\Entities\Attributes\Translatable;
+use Devrun\DoctrineModule\Entities\DateTimeTrait;
+use Devrun\DoctrineModule\Entities\IdentifiedEntityTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Devrun\Doctrine\Entities\BlameableTrait;
-use Devrun\Doctrine\Entities\DateTimeTrait;
-use Devrun\Doctrine\Entities\IdentifiedEntityTrait;
-use Devrun\Doctrine\Entities\Attributes\Translatable;
 use Kdyby\Doctrine\Entities\MagicAccessors;
 use Kdyby\Translation\Translator;
 use Nette\Utils\DateTime;

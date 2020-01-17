@@ -5,6 +5,8 @@
   "type": "module",
   "homepage": "http://devrun.cz",
   "license": "proprietary",
+  "version": "v0.1.0",
+  "minimum-stability": "dev",
   "authors": [
     {
       "name": "Pavel Paulík",
@@ -24,10 +26,21 @@
     {
       "type": "vcs",
       "url": "https://github.com/developer-run/cms-module"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/developer-run/doctrine-module"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/developer-run/ckeditor-module"
     }
   ],
   "autoload": {
     "classmap": ["src/"]
+  },
+  "config": {
+    "vendor-dir": "../../../vendor"
   },
   "extra": {
     "branch-alias": {

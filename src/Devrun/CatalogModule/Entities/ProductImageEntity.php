@@ -10,10 +10,10 @@
 namespace Devrun\CatalogModule\Entities;
 
 use Devrun\CmsModule\Entities\IImage;
-use Devrun\Doctrine\Entities\ImageTrait;
+use Devrun\DoctrineModule\Entities\DateTimeTrait;
+use Devrun\DoctrineModule\Entities\IdentifiedEntityTrait;
+use Devrun\DoctrineModule\Entities\ImageTrait;
 use Doctrine\ORM\Mapping as ORM;
-use Devrun\Doctrine\Entities\DateTimeTrait;
-use Devrun\Doctrine\Entities\IdentifiedEntityTrait;
 use Kdyby\Doctrine\Entities\MagicAccessors;
 
 /**

@@ -9,9 +9,8 @@
 
 namespace Devrun\CatalogModule\Entities;
 
-use Devrun\Entities\UtilityEntity;
+use Devrun\DoctrineModule\Entities\Attributes\Translation;
 use Doctrine\ORM\Mapping as ORM;
-use Devrun\Doctrine\Entities\Attributes\Translation;
 use Kdyby\Doctrine\Entities\MagicAccessors;
 
 /**
