@@ -10,8 +10,8 @@
 namespace Devrun\CatalogModule\Entities;
 
 use Devrun\CmsModule\Entities\RouteEntity;
-use Devrun\Doctrine\Entities\DateTimeTrait;
-use Devrun\Doctrine\Entities\IdentifiedEntityTrait;
+use Devrun\DoctrineModule\Entities\DateTimeTrait;
+use Devrun\DoctrineModule\Entities\IdentifiedEntityTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Kdyby\Doctrine\Entities\MagicAccessors;
 
@@ -21,7 +21,7 @@ use Kdyby\Doctrine\Entities\MagicAccessors;
  * @ORM\Entity
  * @ORM\Table(name="catalog_tracking",
  * indexes={
- *  @ORM\Index(name="session_idx", columns={"session_id"}),
+ *  @ORM\Index(name="order_session_idx", columns={"session_id"}),
  *  @ORM\Index(name="action_idx", columns={"action"}),
  *  @ORM\Index(name="message_idx", columns={"message"}),
  *  @ORM\Index(name="ip_idx", columns={"ip"}),

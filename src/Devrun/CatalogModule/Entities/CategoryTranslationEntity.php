@@ -16,7 +16,7 @@ use Kdyby\Doctrine\Entities\MagicAccessors;
 /**
  * Class ProductTranslationEntity
  *
- * @ORM\Cache(region="category_translation")
+ * @ORM\Cache(region="category_translation", usage="NONSTRICT_READ_WRITE")
  * @ORM\Entity
  * @ORM\Table(name="catalog_category_translation",
  * indexes={

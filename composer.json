@@ -5,7 +5,6 @@
   "type": "module",
   "homepage": "http://devrun.cz",
   "license": "proprietary",
-  "version": "v0.1.1",
   "minimum-stability": "dev",
   "authors": [
     {

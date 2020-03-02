@@ -22,7 +22,7 @@ use Kdyby\Doctrine\Entities\MagicAccessors;
  * @ORM\Entity(repositoryClass="Devrun\CatalogModule\Repositories\OrderRepository")
  * @ORM\Table(name="catalog_order",
  * indexes={
- *  @ORM\Index(name="session_idx", columns={"session_id"}),
+ *  @ORM\Index(name="order_session_idx", columns={"session_id"}),
  * })
  *
  * @package Devrun\CatalogModule\Entities

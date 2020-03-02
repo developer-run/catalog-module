@@ -20,6 +20,7 @@ use Devrun\CmsModule\Facades\ImageManageFacade;
 use Devrun\CmsModule\Forms\DevrunForm;
 use Devrun\CmsModule\Presenters\AdminPresenter;
 use Devrun\Utils\Pattern;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Kdyby\Doctrine\QueryBuilder;
 use Nette\Forms\Container;
 use Nette\Forms\Form;
@@ -460,9 +461,9 @@ class ProductPresenter extends AdminPresenter
             ->setSortable()
             ->onChange[] = function ($id, $value) {
             /** @var ProductEntity $entity */
-            if ($entity= $this->productRepository->find($id)) {
+            if ($entity= $this->catalogFacade->getProductRepository()->find($id)) {
                 $entity->setActive($value);
-                $this->productRepository->getEntityManager()->persist($entity)->flush();
+                $this->catalogFacade->getEntityManager()->persist($entity)->flush();
                 $this->flashMessage("Produkt {$entity->getName()} upraven", 'success');
                 $this['categoryProductsGridControl']->redrawItem($id);
                 $this->ajaxRedirect('this', null, 'flash');
@@ -497,7 +498,7 @@ class ProductPresenter extends AdminPresenter
         $grid->addAction('action', 'akce', 'actionProduct!')
             ->setIcon('handshake-o')
             ->setTitle('Označit produkt `akční`')
-            ->setConfirm('Do you really want to delete row %s?', 'name')
+            ->setConfirm('Do you really want to set action %s?', 'name')
             ->setClass(function (ProductEntity $entity) {
                 return $entity->action ? "btn btn-xs btn-info ajax" : "btn btn-xs btn-default ajax";
             });
@@ -526,7 +527,7 @@ class ProductPresenter extends AdminPresenter
                 $id = $values->id;
 
                 /** @var ProductEntity $entity */
-                if (!$entity = $this->productRepository->find($id)) {
+                if (!$entity = $this->catalogFacade->getProductRepository()->find($id)) {
                     $entity = new ProductEntity($this->translator, $values->name);
                     $entity->addCategory($this->categoryEntity);
                 }
@@ -539,7 +540,7 @@ class ProductPresenter extends AdminPresenter
 
                 $entity->mergeNewTranslations();
 
-                $this->productRepository->getEntityManager()->persist($entity)->flush();
+                $this->catalogFacade->getEntityManager()->persist($entity)->flush();
 
             } catch (UniqueConstraintViolationException $e) {
                 $message = "product `{$entity->getName()}` exist, [error code {$e->getErrorCode()}]";
@@ -551,7 +552,7 @@ class ProductPresenter extends AdminPresenter
             $message = "Kategorie [{$entity->getName()}] přidána!";
             $presenter->flashMessage($message, FlashMessageControl::TOAST_TYPE, 'Správa katalogu', FlashMessageControl::TOAST_SUCCESS);
 
-            $this['categoryProductsGridControl']->reload();
+            $this['productsGridControl']->reload();
             $this->ajaxRedirect('this', null, ['flash']);
         };
 
@@ -621,7 +622,7 @@ class ProductPresenter extends AdminPresenter
         $grid->getInlineEdit()->onSubmit[] = function($id, $values) use ($presenter) {
 
             /** @var ProductEntity $entity */
-            if ($entity= $this->productRepository->find($id)) {
+            if ($entity= $this->catalogFacade->getProductRepository()->find($id)) {
 
                 foreach ($values as $key => $value) {
                     if (isset($entity->$key)) {
@@ -630,7 +631,7 @@ class ProductPresenter extends AdminPresenter
                 }
 
                 $entity->mergeNewTranslations();
-                $this->productRepository->getEntityManager()->persist($entity)->flush();
+                $this->catalogFacade->getEntityManager()->persist($entity)->flush();
 
                 $message = "Product [{$entity->getName()}] upraven!";
                 $presenter->flashMessage($message, FlashMessageControl::TOAST_TYPE, 'Správa produktu', FlashMessageControl::TOAST_INFO);
