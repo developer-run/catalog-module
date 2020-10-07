@@ -13,7 +13,7 @@
     }
   ],
   "require": {
-    "devrun/cms-module": "v0.8.*",
+    "devrun/cms-module": "v0.9.*",
     "ext-simplexml": "*",
     "ext-iconv": "*"
   },

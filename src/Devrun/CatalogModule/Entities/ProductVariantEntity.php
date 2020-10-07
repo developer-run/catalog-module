@@ -13,7 +13,7 @@ use Devrun\DoctrineModule\Entities\IdentifiedEntityTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Kdyby\Doctrine\Entities\MagicAccessors;
+use Kdyby\Doctrine\MagicAccessors\MagicAccessors;
 
 /**
  * Class ProductVariantEntity

@@ -19,7 +19,7 @@
 			<div class="col-md-4">
 				<figure class="img-responsive img-rounded">
 				{if $image}
-					<a href="{$basePath}/media/{$this->_imgStorage->fromIdentifier($image->identifier)->identifier}" data-lightbox="{$image->namespace}">
+					<a href="{$basePath}/media/{$control->imgStorage->fromIdentifier($image->identifier)->identifier}" data-lightbox="{$image->namespace}">
 						<img n:img="$image->identifier, '250x250', fill" class="attachment-img">
 					</a>
 				{else}

@@ -18,7 +18,7 @@ use Devrun\DoctrineModule\Entities\NestedEntityTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
-use Kdyby\Doctrine\Entities\MagicAccessors;
+use Kdyby\Doctrine\MagicAccessors\MagicAccessors;
 use Kdyby\Translation\Translator;
 
 /**
@@ -203,6 +203,7 @@ class CategoryEntity
     {
         if (!$this->products->contains($productEntity)) {
             $this->products->add($productEntity);
+            $productEntity->addCategory($this);
         }
         return $this;
     }
@@ -257,7 +258,9 @@ class CategoryEntity
      */
     public function addProducts(array $productsEntity)
     {
-        $this->products[] = $productsEntity;
+        foreach ($productsEntity as $productEntity) {
+            $this->addProduct($productEntity);
+        }
         return $this;
     }
 
@@ -350,12 +353,15 @@ class CategoryEntity
         return $this->note;
     }
 
+
     /**
      * @param string $note
+     * @return $this
      */
     public function setNote(string $note)
     {
         $this->note = $note;
+        return $this;
     }
 
 

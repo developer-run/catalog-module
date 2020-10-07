@@ -10,11 +10,13 @@
 namespace Devrun\CatalogModule\Repositories;
 
 use Devrun\CatalogModule\Repositories\Queries\ItemQuery;
+use Devrun\DoctrineModule\Repositories\EntityRepositoryTrait;
 use Kdyby\Doctrine\EntityRepository;
 
 class ProductRepository extends EntityRepository
 {
 
+    use EntityRepositoryTrait;
 
 
     public function getItemsInCategories($categories = null)

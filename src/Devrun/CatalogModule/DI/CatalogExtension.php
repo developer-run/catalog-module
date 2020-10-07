@@ -19,12 +19,15 @@ use Devrun\CatalogModule\Entities\ProductImageEntity;
 use Devrun\CatalogModule\Entities\ProductVariantEntity;
 use Devrun\CatalogModule\Repositories\ProductVariantRepository;
 use Devrun\Config\CompilerExtension;
-use Flame\Modules\Providers\IPresenterMappingProvider;
+use Devrun\Module\Providers\IPresenterMappingProvider;
 use Kdyby\Console\DI\ConsoleExtension;
 use Kdyby\Doctrine\DI\IEntityProvider;
 use Kdyby\Doctrine\DI\OrmExtension;
 use Kdyby\Events\DI\EventsExtension;
 use Nette\DI\ContainerBuilder;
+use Nette\DI\Extensions\InjectExtension;
+use Nette\Schema\Expect;
+use Nette\Schema\Schema;
 
 /**
  * Class CatalogExtension|CompilerExtension
@@ -33,34 +36,38 @@ use Nette\DI\ContainerBuilder;
  */
 class CatalogExtension extends CompilerExtension implements IEntityProvider, IPresenterMappingProvider
 {
-    public $defaults = array(
-        'feedXmlUrl'          => '',
-        'feedExpireTime'      => '2 weeks',
-        'htmlExpireTime'      => '1 weeks',
-        'filteredHtmlInCache' => true,
-        'update' => [
-            'new' => [
-                'limit' => 2,
-                'enable' => true,
-            ],
-            'update' => [
-                'limit' => 2,
-                'enable' => true,
-            ],
-            'remove' => [
-                'limit' => 2,
-                'enable' => true,
-            ],
-        ],
-        'email' => [
-            'send' => !"%debugMode%",
-            'from' => 'Franta <example@email.com>',
-            'to' => 'email@email.com',
-            'subject' => 'aktualizace',
-        ],
 
+    public function getConfigSchema(): Schema
+    {
+        return Expect::structure([
+            'feedXmlUrl'          => Expect::string(),
+            'feedExpireTime'      => Expect::string('2 weeks'),
+            'htmlExpireTime'      => Expect::string('1 weeks'),
+            'filteredHtmlInCache' => Expect::bool(true),
+            'update'              => Expect::structure([
+                'new'    => Expect::structure([
+                    'limit'  => Expect::int(2),
+                    'enable' => Expect::bool(true),
+                ]),
+                'update' => Expect::structure([
+                    'limit'  => Expect::int(2),
+                    'enable' => Expect::bool(true),
+                ]),
+                'remove' => Expect::structure([
+                    'limit'  => Expect::int(2),
+                    'enable' => Expect::bool(true),
+                ]),
+            ]),
 
-    );
+            'email' => Expect::structure([
+                'send'    => Expect::bool(true),
+                'from'    => Expect::string('Franta <example@email.com>'),
+                'to'      => Expect::string('email@email.com'),
+                'subject' => Expect::string('aktualizace'),
+            ]),
+
+        ]);
+    }
 
 
     public function loadConfiguration()
@@ -69,8 +76,7 @@ class CatalogExtension extends CompilerExtension implements IEntityProvider, IPr
 
         /** @var ContainerBuilder $builder */
         $builder = $this->getContainerBuilder();
-        $config  = $this->getConfig($this->defaults);
-
+        $config  = $this->getConfig();
 
 
         /*
@@ -85,17 +91,17 @@ class CatalogExtension extends CompilerExtension implements IEntityProvider, IPr
          * facade services
          */
         $builder->addDefinition($this->prefix('facade.catalog'))
-            ->setType(Devrun\CmsModule\CatalogModule\Facades\CatalogFacade::class)
-            ->setInject();
+                ->setType(Devrun\CmsModule\CatalogModule\Facades\CatalogFacade::class)
+                ->addTag(InjectExtension::TAG_INJECT);
 
         $builder->addDefinition($this->prefix('facade.catalogImage'))
-            ->setType(Devrun\CmsModule\CatalogModule\Facades\CatalogImageFacade::class);
+                ->setType(Devrun\CmsModule\CatalogModule\Facades\CatalogImageFacade::class);
 
         $builder->addDefinition($this->prefix('facade.tracking'))
-            ->setType(Devrun\CmsModule\CatalogModule\Facades\TrackingFacade::class);
+                ->setType(Devrun\CmsModule\CatalogModule\Facades\TrackingFacade::class);
 
         $builder->addDefinition($this->prefix('facade.feed'))
-            ->setFactory(Devrun\CmsModule\CatalogModule\Facades\FeedFacade::class, ['options' => $config['update']]);
+                ->setFactory(Devrun\CmsModule\CatalogModule\Facades\FeedFacade::class, ['options' => $config->update]);
 
 
         /*
@@ -103,40 +109,39 @@ class CatalogExtension extends CompilerExtension implements IEntityProvider, IPr
          */
         $builder->addDefinition($this->prefix('manager.feed'))
                 ->setType(Devrun\CatalogModule\Managers\FeedManageManager::class)
-                ->addSetup('setFeedXmlUrl', [$config['feedXmlUrl']])
-                ->addSetup('setFeedExpireTime', [$config['feedExpireTime']])
-                ->addSetup('setHtmlExpireTime', [$config['htmlExpireTime']])
-                ->addSetup('setFilteredHtmlInCache', [$config['filteredHtmlInCache']])
-                ->setInject(true);
-
+                ->addSetup('setFeedXmlUrl', [$config->feedXmlUrl])
+                ->addSetup('setFeedExpireTime', [$config->feedExpireTime])
+                ->addSetup('setHtmlExpireTime', [$config->htmlExpireTime])
+                ->addSetup('setFilteredHtmlInCache', [$config->filteredHtmlInCache])
+                ->addTag(InjectExtension::TAG_INJECT, true);
 
 
         /*
          * repositories factory
          */
         $builder->addDefinition($this->prefix('repository.order'))
-            ->setType('Devrun\CatalogModule\Repositories\OrderRepository')
-            ->addTag(OrmExtension::TAG_REPOSITORY_ENTITY, OrderEntity::class);
+                ->setType('Devrun\CatalogModule\Repositories\OrderRepository')
+                ->addTag(OrmExtension::TAG_REPOSITORY_ENTITY, OrderEntity::class);
 
         $builder->addDefinition($this->prefix('repository.catalog'))
-            ->setType('Devrun\CatalogModule\Repositories\CategoryRepository')
-            ->addTag(OrmExtension::TAG_REPOSITORY_ENTITY, CategoryEntity::class);
+                ->setType('Devrun\CatalogModule\Repositories\CategoryRepository')
+                ->addTag(OrmExtension::TAG_REPOSITORY_ENTITY, CategoryEntity::class);
 
         $builder->addDefinition($this->prefix('repository.catalogCategoryImage'))
-            ->setType('Devrun\CatalogModule\Repositories\CategoryImageRepository')
-            ->addTag(OrmExtension::TAG_REPOSITORY_ENTITY, CategoryImageEntity::class);
+                ->setType('Devrun\CatalogModule\Repositories\CategoryImageRepository')
+                ->addTag(OrmExtension::TAG_REPOSITORY_ENTITY, CategoryImageEntity::class);
 
         $builder->addDefinition($this->prefix('repository.product'))
-            ->setType('Devrun\CatalogModule\Repositories\ProductRepository')
-            ->addTag(OrmExtension::TAG_REPOSITORY_ENTITY, ProductEntity::class);
+                ->setType('Devrun\CatalogModule\Repositories\ProductRepository')
+                ->addTag(OrmExtension::TAG_REPOSITORY_ENTITY, ProductEntity::class);
 
         $builder->addDefinition($this->prefix('repository.productVariant'))
-            ->setType(ProductVariantRepository::class)
-            ->addTag(OrmExtension::TAG_REPOSITORY_ENTITY, ProductVariantEntity::class);
+                ->setType(ProductVariantRepository::class)
+                ->addTag(OrmExtension::TAG_REPOSITORY_ENTITY, ProductVariantEntity::class);
 
         $builder->addDefinition($this->prefix('repository.productImage'))
-            ->setType('Devrun\CatalogModule\Repositories\ProductImageRepository')
-            ->addTag(OrmExtension::TAG_REPOSITORY_ENTITY, ProductImageEntity::class);
+                ->setType('Devrun\CatalogModule\Repositories\ProductImageRepository')
+                ->addTag(OrmExtension::TAG_REPOSITORY_ENTITY, ProductImageEntity::class);
 
         $builder->addDefinition($this->prefix('repository.sitemap'))
                 ->setType('Devrun\CatalogModule\Repositories\SitemapRepository');
@@ -145,35 +150,34 @@ class CatalogExtension extends CompilerExtension implements IEntityProvider, IPr
         /*
          * forms factory
          */
-        $builder->addDefinition($this->prefix('form.category'))
-            ->setImplement('Devrun\CmsModule\CatalogModule\Forms\ICategoryFormFactory')
-            ->addSetup('create')
-            ->addSetup('bootstrap3Render')
-            ->setInject();
+        $builder->addFactoryDefinition($this->prefix('form.category'))
+                ->setImplement('Devrun\CmsModule\CatalogModule\Forms\ICategoryFormFactory')
+                ->addSetup('create')
+                ->addSetup('bootstrap3Render')
+                ->addTag(InjectExtension::TAG_INJECT);
 
-        $builder->addDefinition($this->prefix('form.product'))
-            ->setImplement('Devrun\CmsModule\CatalogModule\Forms\IProductFormFactory')
-            ->addSetup('create')
-            ->addSetup('bootstrap3Render')
-            ->setInject();
+        $builder->addFactoryDefinition($this->prefix('form.product'))
+                ->setImplement('Devrun\CmsModule\CatalogModule\Forms\IProductFormFactory')
+                ->addSetup('create')
+                ->addSetup('bootstrap3Render')
+                ->addTag(InjectExtension::TAG_INJECT);
 
-        $builder->addDefinition($this->prefix('form.images'))
-            ->setImplement('Devrun\CmsModule\CatalogModule\Forms\IImagesFormFactory')
-            ->addSetup('create')
-            ->addSetup('bootstrap3Render')
-            ->setInject();
+        $builder->addFactoryDefinition($this->prefix('form.images'))
+                ->setImplement('Devrun\CmsModule\CatalogModule\Forms\IImagesFormFactory')
+                ->addSetup('create')
+                ->addSetup('bootstrap3Render')
+                ->addTag(InjectExtension::TAG_INJECT);
 
-        $builder->addDefinition($this->prefix('form.image'))
-            ->setImplement('Devrun\CmsModule\CatalogModule\Forms\IImageFormFactory')
-            ->addSetup('create')
-            ->addSetup('bootstrap3Render')
-            ->setInject();
-
+        $builder->addFactoryDefinition($this->prefix('form.image'))
+                ->setImplement('Devrun\CmsModule\CatalogModule\Forms\IImageFormFactory')
+                ->addSetup('create')
+                ->addSetup('bootstrap3Render')
+                ->addTag(InjectExtension::TAG_INJECT);
 
         $builder->addDefinition('cms.catalog.presenters.feed')
-            ->setType(Devrun\CmsModule\CatalogModule\Presenters\FeedPresenter::class)
-            ->addSetup('setFeedXmlUrl', [$config['feedXmlUrl']])
-            ->addTag(Devrun\Utils\PresenterUtil::DEVRUN_PRESENTER_TAG)
+                ->setType(Devrun\CmsModule\CatalogModule\Presenters\FeedPresenter::class)
+                ->addSetup('setFeedXmlUrl', [$config->feedXmlUrl])
+                ->addTag(Devrun\Utils\PresenterUtil::DEVRUN_PRESENTER_TAG)
                 ->addTag('administration', [
                     'category'    => 'modules.catalog',
                     'name'        => 'messages.feed.name',
@@ -184,44 +188,38 @@ class CatalogExtension extends CompilerExtension implements IEntityProvider, IPr
                 ]);
 
 
-
-
         /*
          * controls factory
          */
-        $builder->addDefinition($this->prefix('control.catalog'))
-            ->setImplement('Devrun\CatalogModule\Controls\ICatalogControlFactory')
-            ->setInject(true);
+        $builder->addFactoryDefinition($this->prefix('control.catalog'))
+                ->setImplement('Devrun\CatalogModule\Controls\ICatalogControlFactory')
+                ->addTag(InjectExtension::TAG_INJECT);
 
-        $builder->addDefinition($this->prefix('control.products'))
-            ->setImplement('Devrun\CatalogModule\Controls\IProductsControlFactory')
-            ->setInject(true);
+        $builder->addFactoryDefinition($this->prefix('control.products'))
+                ->setImplement('Devrun\CatalogModule\Controls\IProductsControlFactory')
+                ->addTag(InjectExtension::TAG_INJECT);
 
-        $builder->addDefinition($this->prefix('control.categoryTree'))
-            ->setImplement('Devrun\CatalogModule\Controls\ICategoryTreeControlFactory')
-            ->setInject(true);
+        $builder->addFactoryDefinition($this->prefix('control.categoryTree'))
+                ->setImplement('Devrun\CatalogModule\Controls\ICategoryTreeControlFactory')
+                ->addTag(InjectExtension::TAG_INJECT);
 
-        $builder->addDefinition($this->prefix('control.search'))
-            ->setImplement('Devrun\CatalogModule\Controls\ISearchControlFactory')
-            ->setInject(true);
+        $builder->addFactoryDefinition($this->prefix('control.search'))
+                ->setImplement('Devrun\CatalogModule\Controls\ISearchControlFactory')
+                ->addTag(InjectExtension::TAG_INJECT);
 
-        $builder->addDefinition($this->prefix('control.carousel'))
-            ->setImplement('Devrun\CatalogModule\Controls\ICarouselProductsControlFactory')
-            ->setInject(true);
+        $builder->addFactoryDefinition($this->prefix('control.carousel'))
+                ->setImplement('Devrun\CatalogModule\Controls\ICarouselProductsControlFactory')
+                ->addTag(InjectExtension::TAG_INJECT);
 
 
         /*
          * listeners
          */
         $builder->addDefinition($this->prefix('listeners.feed'))
-                ->setFactory(Devrun\CatalogModule\Listeners\FeedListener::class, [$config['email']])
+                ->setFactory(Devrun\CatalogModule\Listeners\FeedListener::class, [$config->email])
                 ->addTag(EventsExtension::TAG_SUBSCRIBER);
 
-
     }
-
-
-
 
 
     /**
@@ -239,8 +237,8 @@ class CatalogExtension extends CompilerExtension implements IEntityProvider, IPr
     /**
      * Returns array of ClassNameMask => PresenterNameMask
      *
-     * @example return array('*' => 'Booking\*Module\Presenters\*Presenter');
      * @return array
+     * @example return array('*' => 'Booking\*Module\Presenters\*Presenter');
      */
     public function getPresenterMapping()
     {

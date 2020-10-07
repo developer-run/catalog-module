@@ -16,13 +16,12 @@ use Devrun\DoctrineModule\Entities\DateTimeTrait;
 use Devrun\DoctrineModule\Entities\IdentifiedEntityTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Kdyby\Doctrine\Entities\MagicAccessors;
+use Kdyby\Doctrine\MagicAccessors\MagicAccessors;
 use Kdyby\Translation\Translator;
 use Nette\Utils\DateTime;
 
 /**
  * Class ProductEntity
- * @ORM\Cache(region="product", usage="NONSTRICT_READ_WRITE")
  * @ORM\Entity(repositoryClass="Devrun\CatalogModule\Repositories\ProductRepository")
  * @ORM\Table(name="catalog_product",
  * indexes={
@@ -49,7 +48,7 @@ class ProductEntity
 
     /**
      * @var CategoryEntity[]|ArrayCollection
-     * @ORM\Cache(region="product", usage="NONSTRICT_READ_WRITE")
+     * _@_ORM\Cache(region="product", usage="NONSTRICT_READ_WRITE")
      * @ORM\ManyToMany(targetEntity="CategoryEntity", inversedBy="products", orphanRemoval=true)
      * @ORM\JoinTable(name="catalog_category_products")
      * @ORM\JoinColumn(onDelete="CASCADE")
@@ -74,7 +73,7 @@ class ProductEntity
 
     /**
      * @var ProductVariantEntity[]|ArrayCollection
-     * @ORM\Cache(region="product", usage="NONSTRICT_READ_WRITE")
+     * _@_ORM\Cache(region="product", usage="NONSTRICT_READ_WRITE")
      * @ORM\ManyToMany(targetEntity="ProductVariantEntity", inversedBy="products")
      * @ORM\JoinTable(name="catalog_products_variants")
      * @ORM\JoinColumn(onDelete="CASCADE")
@@ -223,7 +222,29 @@ class ProductEntity
         return $this->active;
     }
 
+    /**
+     * @return bool
+     */
+    public function isAction(): bool
+    {
+        return $this->action;
+    }
 
+    /**
+     * @return bool
+     */
+    public function isRecommend(): bool
+    {
+        return $this->recommend;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTopped(): bool
+    {
+        return $this->topped;
+    }
 
 
     /**
@@ -428,6 +449,19 @@ class ProductEntity
     }
 
 
+    public function setAttachment($name)
+    {
+        $this->translate($this->currentLocale, false)->setAttachment($name);
+        return $this;
+    }
+
+    public function getAttachment()
+    {
+        return $this->translate()->getAttachment();
+    }
+
+
+
 
 
     public function getFeedUrl(): string
@@ -481,6 +515,7 @@ class ProductEntity
      * @param DateTime $publishedFrom
      *
      * @return ProductEntity
+     * @throws \Exception
      */
     public function setPublishedFrom($publishedFrom): ProductEntity
     {
@@ -499,6 +534,7 @@ class ProductEntity
      * @param DateTime $publishedTo
      *
      * @return ProductEntity
+     * @throws \Exception
      */
     public function setPublishedTo($publishedTo): ProductEntity
     {

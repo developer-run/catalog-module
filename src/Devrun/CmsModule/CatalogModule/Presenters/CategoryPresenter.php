@@ -310,7 +310,7 @@ class CategoryPresenter extends AdminPresenter
                 }
 
                 foreach ($values as $key => $value) {
-                    if (isset($entity->$key) & $value) {
+                    if (isset($entity->$key) && $value) {
                         $entity->$key = $value;
                     }
                 }

@@ -14,7 +14,7 @@ use Devrun\CmsModule\Entities\UserEntity;
 use Devrun\DoctrineModule\Entities\DateTimeTrait;
 use Devrun\DoctrineModule\Entities\IdentifiedEntityTrait;
 use Doctrine\ORM\Mapping as ORM;
-use Kdyby\Doctrine\Entities\MagicAccessors;
+use Kdyby\Doctrine\MagicAccessors\MagicAccessors;
 
 /**
  * Class OrderEntity

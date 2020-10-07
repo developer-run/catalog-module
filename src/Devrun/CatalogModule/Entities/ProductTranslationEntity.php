@@ -11,11 +11,11 @@ namespace Devrun\CatalogModule\Entities;
 
 use Devrun\DoctrineModule\Entities\Attributes\Translation;
 use Doctrine\ORM\Mapping as ORM;
-use Kdyby\Doctrine\Entities\MagicAccessors;
+use Kdyby\Doctrine\MagicAccessors\MagicAccessors;
 
 /**
  * Class ProductTranslationEntity
- * @ORM\Cache(region="product_translation", usage="NONSTRICT_READ_WRITE")
+ * _@_ORM\Cache(region="product_translation", usage="NONSTRICT_READ_WRITE")
  * @ORM\Entity
  * @ORM\Table(name="catalog_product_translation",
  * indexes={
@@ -54,6 +54,12 @@ class ProductTranslationEntity
      * @ORM\Column(type="text", nullable=true, length=65536)
      */
     protected $description; // UtilityEntity::demoText;
+
+    /**
+     * @var string|null
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $attachment;
 
 
 
@@ -122,6 +128,22 @@ class ProductTranslationEntity
     public function setShortDescription($shortDescription)
     {
         $this->shortDescription = $shortDescription;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getAttachment()
+    {
+        return $this->attachment;
+    }
+
+    /**
+     * @param string|null $attachment
+     */
+    public function setAttachment(string $attachment)
+    {
+        $this->attachment = $attachment;
     }
 
 

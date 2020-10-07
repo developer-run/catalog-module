@@ -10,7 +10,6 @@
 namespace Devrun\CmsModule\CatalogModule\Forms;
 
 use Devrun\CmsModule\Forms\DevrunForm;
-use Devrun\Doctrine\DoctrineForms\IComponentMapper;
 use Nette\Application\UI\Form;
 
 interface IProductFormFactory
@@ -35,12 +34,12 @@ class ProductForm extends DevrunForm implements IProductFormFactory
         $this->addText('name', 'Název')
             ->setAttribute('placeholder', "Název produktu")
             ->addRule(Form::FILLED)
-            ->addRule(Form::MAX_LENGTH, NULL, 32);
+            ->addRule(Form::MAX_LENGTH, NULL, 64);
 
         $this->addText('title', 'Titulek')
             ->setAttribute('placeholder', "Název titulku")
             ->addRule(Form::FILLED)
-            ->addRule(Form::MAX_LENGTH, NULL, 32);
+            ->addRule(Form::MAX_LENGTH, NULL, 64);
 
         $this->addTextArea('description', 'Popis', 0, 8)
             ->setAttribute('placeholder', "Popis produktu")
@@ -64,6 +63,10 @@ class ProductForm extends DevrunForm implements IProductFormFactory
             ->addRule(Form::NUMERIC)
             ->addRule(Form::RANGE, 'Požadovaný počet by neměl být záporný', [0, PHP_INT_MAX]);
 
+        $this->addText('attachment', 'Příloha')
+            ->setAttribute('placeholder', "Příloha produktu")
+            ->addCondition(Form::FILLED)
+            ->addRule(Form::MAX_LENGTH, NULL, 255);
 
 
 //        $this->addText('dph', 'Dph')

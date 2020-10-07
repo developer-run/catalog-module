@@ -26,7 +26,7 @@
 						<div class="attachment-block clearfix{if $image->main} bg-purple{/if}">
 							{*<img class="attachment-img" src="http://placehold.it/150x100">*}
 
-							<a href="{$basePath}/media/{$this->_imgStorage->fromIdentifier($image->identifier)->identifier}" data-lightbox="{$image->namespace}" data-title="{$image->description}">
+							<a href="{$basePath}/media/{$control->imgStorage->fromIdentifier($image->identifier)->identifier}" data-lightbox="{$image->namespace}" data-title="{$image->description}">
 								<img n:img="$image->identifier, '200x200', fill" class="attachment-img">
 							</a>
 
